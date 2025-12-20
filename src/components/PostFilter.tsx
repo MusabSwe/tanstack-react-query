@@ -19,7 +19,7 @@ const PostFilter = ({ selectedPostStatus, setSelectedPostStatus }:PostFilterProp
           <option value="all">Select Status</option>
           <option value="publish">Publish</option>
           <option value="draft">Draft</option>
-          <option value="blocked">Blocked</option>
+          <option value="block">Block</option>
         </Form.Select>
         </>
     )
