@@ -3,7 +3,8 @@ import
 
 const useGetPosts = () => {
   return (
- 
+ <>
+ </>
   )
 }
 
