@@ -20,7 +20,8 @@ const fetchPosts = async (): Promise<Post[]> => {
 const useGetPosts = (): UseQueryResult<Post[]> => {
   return useQuery({ // start caching with useQuery
     queryKey: ["posts"], // unique key for the query used for caching
-    queryFn: fetchPosts // function that fetches the data used in the query 
+    queryFn: fetchPosts, // function that fetches the data used in the query 
+    staleTime: 5 * 1000, // data is considered fresh for 5 seconds
   });
 }
 
