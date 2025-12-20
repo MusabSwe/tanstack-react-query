@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // QueryClientProvider such as provider of routing or redux stae management should be at the top level
 // to ensure that all components have access to the query client context.
 // QueryClient is responsible for managing the cache and state of your queries.
@@ -37,5 +38,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <RouterProvider router={router} />
+    <ReactQueryDevtools />
   </QueryClientProvider>
 );
