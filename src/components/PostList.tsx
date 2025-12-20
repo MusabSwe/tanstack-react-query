@@ -1,15 +1,19 @@
 import { Button, ButtonGroup, Form, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
-const PostList = () => {
-    const {data:postsData, isLoading, isError, error} = useGetPosts();
+import { PostStatusType } from "../types";
+interface PostListProps {
+    selectedPostStatus: PostStatusType;
+}
+const PostList = ({ selectedPostStatus }: PostListProps) => {
+    const { data: postsData, isLoading, isError, error } = useGetPosts(selectedPostStatus);
 
     // Handle loading and error states and if it not exist will crash since postsData is undefined 
-    if(isLoading){
+    if (isLoading) {
         return <div>Loading...</div>
     }
-    
-    if(isError){
+
+    if (isError) {
         return <div>Error loading posts {error?.message}</div>
     }
     return (
@@ -25,7 +29,7 @@ const PostList = () => {
             </thead>
             <tbody>
                 {
-                    postsData?.map((post: any, index: number) => (
+                    postsData?.filter((post) => selectedPostStatus === "all" || post.status === selectedPostStatus)?.map((post: any, index: number) => (
                         <tr key={index}>
                             <td>{index + 1}</td>
                             <td><Link to={"/info"}>{post.title}</Link></td>
