@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import { PostStatusType } from "../types";
 import useSearch from "../hooks/useSearch";
+import { useState } from "react";
 interface PostListProps {
     selectedPostStatus: PostStatusType;
     searchQuery: string;
 }
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
-    const { data, isLoading, isError, error, isStale, refetch, isFetching } = useGetPosts(selectedPostStatus);
+    const [paginate, setPaginate] = useState(1);
+    const { data, isLoading, isError, error, isStale, refetch, isFetching } = useGetPosts(selectedPostStatus,paginate);
     const { data: searchData, isLoading: isSearchLoading, isError: isSearchError, error: searchError } = useSearch(searchQuery);
 
     // Handle loading and error states and if it not exist will crash since postsData is undefined 
@@ -76,6 +78,15 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                     }
                 </tbody>
             </Table>
+            {searchQuery.length === 0 && selectedPostStatus === "all" && (
+                <ButtonGroup aria-label="Basic example">
+                    {Array.from({ length: 3 }, (_, i) => (
+                        <Button key={i} variant="light" className="" onClick={() => setPaginate(i + 1)}>
+                            {i + 1}
+                        </Button>
+                    ))}
+                </ButtonGroup>
+            )}
         </>
     )
 }
