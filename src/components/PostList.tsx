@@ -8,8 +8,8 @@ interface PostListProps {
     searchQuery: string;
 }
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
-    const { data: postsData, isLoading, isError, error } = useGetPosts(selectedPostStatus);
-    const { data: searchData, isLoading: isSearchLoading, isError: isSearchError ,error: searchError,} = useSearch(searchQuery);
+    const { data, isLoading, isError, error } = useGetPosts(selectedPostStatus);
+    const { data: searchData, isLoading: isSearchLoading, isError: isSearchError, error: searchError, } = useSearch(searchQuery);
 
     // Handle loading and error states and if it not exist will crash since postsData is undefined 
     if (isLoading || isSearchLoading) {
@@ -36,12 +36,12 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
             </thead>
             <tbody>
                 {searchQuery.length === 0 &&
-                    postsData?.filter((post) => selectedPostStatus === "all" || post.status === selectedPostStatus)?.map((post: any, index: number) => (
+                    data?.map((post: any, index: number) => (
                         <tr key={post.id}>
                             <td>{index + 1}</td>
                             <td><Link to={"/info"}>{post.title}</Link></td>
                             <td style={{ textAlign: 'center' }}>
-                                <Form.Check type="switch" checked={post.topRate} />
+                                <Form.Check type="switch" onChange={() => { }} checked={post.topRate} />
                             </td>
                             <td>
                                 <ButtonGroup aria-label="Basic example">
@@ -52,12 +52,12 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                     ))
                 }
                 {searchQuery.length > 0 &&
-                    searchData?.filter((post) => selectedPostStatus === "all" || post.status === selectedPostStatus)?.map((post: any, index: number) => (
+                    searchData?.map((post: any, index: number) => (
                         <tr key={post.id}>
                             <td>{index + 1}</td>
                             <td><Link to={"/info"}>{post.title}</Link></td>
                             <td style={{ textAlign: 'center' }}>
-                                <Form.Check type="switch" checked={post.topRate} />
+                                <Form.Check type="switch" onChange={() => { }} checked={post.topRate} />
                             </td>
                             <td>
                                 <ButtonGroup aria-label="Basic example">

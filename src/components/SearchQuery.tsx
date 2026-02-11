@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { Form } from "react-bootstrap"
 
 interface SearchQueryProps {
@@ -9,7 +9,6 @@ const SearchQuery = ({ setSearchQuery }: SearchQueryProps) => {
 
     const querySubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // console.log("Submitted query:", query);
         setSearchQuery(query);
     }
     return (

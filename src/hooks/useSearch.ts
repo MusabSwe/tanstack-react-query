@@ -2,8 +2,10 @@ import axios from "axios";
 import { Post } from "../types"
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
-const fetchData = async (query: string): Promise<Post[]> => {
-    const response = await axios.get<Post[]>(`http://localhost:3005/posts?q=${query}`);
+const fetchData = async (q: string): Promise<Post[]> => {
+    const response = await axios.get("http://localhost:3005/posts", {
+        params: { title_loke: q }
+    });
     return response.data;
 }
 const useSearch = (q: string): UseQueryResult<Post[]> => {
