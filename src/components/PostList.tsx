@@ -9,7 +9,7 @@ interface PostListProps {
 }
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
     const { data, isLoading, isError, error } = useGetPosts(selectedPostStatus);
-    const { data: searchData, isLoading: isSearchLoading, isError: isSearchError, error: searchError, } = useSearch(searchQuery);
+    const { data: searchData, isLoading: isSearchLoading, isError: isSearchError, error: searchError } = useSearch(searchQuery);
 
     // Handle loading and error states and if it not exist will crash since postsData is undefined 
     if (isLoading || isSearchLoading) {

@@ -4,7 +4,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
 const fetchData = async (q: string): Promise<Post[]> => {
     const response = await axios.get("http://localhost:3005/posts", {
-        params: { title_loke: q }
+        params: { title_like: q }
     });
     return response.data;
 }
