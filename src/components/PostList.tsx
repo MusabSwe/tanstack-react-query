@@ -73,7 +73,7 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                         data?.map((post: any, index: number) => (
                             <tr key={post.id}>
                                 <td>{index + 1}</td>
-                                <td><Link to={"/info"}>{post.title}</Link></td>
+                                <td><Link to={`/info?id=${post.id}&type=paginate&key=${paginate}`}>{post.title}</Link></td>
                                 <td style={{ textAlign: 'center' }}>
                                     <Form.Check type="switch" onChange={() => { }} checked={post.topRate} />
                                 </td>
@@ -89,7 +89,7 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                         searchData?.map((post: any, index: number) => (
                             <tr key={post.id}>
                                 <td>{index + 1}</td>
-                                <td><Link to={"/info"}>{post.title}</Link></td>
+                                <td><Link to={`info?id=${post.id}&type=search&key=${searchQuery}`}>{post.title}</Link></td>
                                 <td style={{ textAlign: 'center' }}>
                                     <Form.Check type="switch" onChange={() => { }} checked={post.topRate} />
                                 </td>
