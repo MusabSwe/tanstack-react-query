@@ -1,18 +1,30 @@
 import { Button, ButtonGroup, Form, Table } from "react-bootstrap";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import useGetPosts from "../hooks/useGetPosts";
+import useGetPosts, { fetchPosts } from "../hooks/useGetPosts";
 import { PostStatusType } from "../types";
 import useSearch from "../hooks/useSearch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 interface PostListProps {
     selectedPostStatus: PostStatusType;
     searchQuery: string;
 }
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
     const [paginate, setPaginate] = useState(1);
-    const { data, isLoading, isError, error, isStale, refetch, isFetching } = useGetPosts(selectedPostStatus,paginate);
+    const { data, isLoading, isError, error, isStale, refetch, isFetching } = useGetPosts(selectedPostStatus, paginate);
     const { data: searchData, isLoading: isSearchLoading, isError: isSearchError, error: searchError } = useSearch(searchQuery);
 
+    const queryClient = useQueryClient();
+    // prefetching the next page of posts data when the paginate state changes, this will make the next page load faster when the user clicks on it since it will be already cached
+    useEffect(() => {
+        const nextPage = paginate + 1;
+        // make sure the key same as the one in useGetPosts and the queryFn also same as the one in useGetPosts to make sure it will be cached and used when we call it instead of making a new request
+        if (nextPage > 3) return; // we have only 3 pages so we stop prefetching after page 3
+        queryClient.prefetchQuery({
+            queryKey: ["posts", { selectedStatus: 'all', paginate: nextPage }], // unique key for the query used for caching, we add selectedStatus to refetch (re-call the api ) when it changes since it's a dependency and if we don't add it here it will not refetch when it changes
+            queryFn: () => fetchPosts('all', nextPage), // function that fetches the data used in the query
+        });
+    }, [paginate, queryClient])
     // Handle loading and error states and if it not exist will crash since postsData is undefined 
     if (isLoading || isSearchLoading) {
         return <div>Loading...</div>
@@ -25,6 +37,19 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
     if (isSearchError) {
         return <div>Error loading posts {searchError?.message}</div>
     }
+    // useEffect should be added above the return statement since it's a hook and hooks should be called at the top level of the component and not inside any condition or loop, we get Unexpected Application Error!
+    // Rendered more hooks than during the previous render.  
+    // prefetching the next page of posts data when the paginate state changes, this will make the next page load faster when the user clicks on it since it will be already cached
+    // useEffect(() => {
+    //     const nextPage = paginate + 1;
+    //     // make sure the key same as the one in useGetPosts and the queryFn also same as the one in useGetPosts to make sure it will be cached and used when we call it instead of making a new request
+    //     if (nextPage > 3) return; // we have only 3 pages so we stop prefetching after page 3
+    //     queryClient.prefetchQuery({
+    //         queryKey: ["posts", { selectedStatus: 'all', paginate: nextPage }], // unique key for the query used for caching, we add selectedStatus to refetch (re-call the api ) when it changes since it's a dependency and if we don't add it here it will not refetch when it changes
+    //         queryFn: () => fetchPosts('all', nextPage), // function that fetches the data used in the query
+    //     });
+    // }, [paginate, queryClient])
+
     return (
         <>
             {/* Manual update */}

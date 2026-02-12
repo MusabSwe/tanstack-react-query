@@ -3,7 +3,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { Post, PostStatusType } from "../types";
 
 // function to fetch posts data from the API, returns a promise that resolves to an array of Post
-const fetchPosts = async (selectedStatus: PostStatusType, paginate: number): Promise<Post[]> => {
+export const fetchPosts = async (selectedStatus: PostStatusType, paginate: number): Promise<Post[]> => {
   if (selectedStatus === 'all') {
     // Make a GET request to the API endpoint to fetch posts data, specifying the expected response type
     const result = await axios.get<Post[]>(`http://localhost:3005/posts?_page=${paginate}&_limit=5`)
