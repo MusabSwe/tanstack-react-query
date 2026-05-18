@@ -11,7 +11,9 @@ export const useGetPost = (id: string, paramType: string, paramKey: string): Use
     const queryCLient = useQueryClient();
     let getCachedData: Post[] | undefined;
     if (paramType === "paginate") {
-        // convert to number since paginate is number and the key in the query is number and if we don't convert it to number it will not find the cached data since the key will be string and not number
+        // convert to number since paginate is number and the key in the query is number 
+        // and if we don't convert it to number it will not find the cached data 
+        // since the key will be string and not number
         getCachedData = queryCLient.getQueryData(["posts", { "paginate": +paramKey, "selectedStatus": "all" }])
     }
     else if (paramType === "search") {
