@@ -13,16 +13,29 @@ const Info = () => {
   const { data, isLoading, error, isError } = useGetPost(id, type, key);
 
   const addComment = useAddComment();
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addComment.mutate({
-      body: comment,
-      post_id: +id
-    }, {
-      onSuccess: () => {
-        setComment("");
+    // mutate contains the payload 
+    addComment.mutate(
+      {
+        body: comment,
+        post_id: +id
+      },
+      {
+        // if successesful request invoke onSuccess  
+        onSuccess: () => {
+          setComment("");
+        },
+        // if faild request invoke onError
+        onError: () => {
+
+          // both success or fail invoke
+        }, onSettled: () => {
+
+        }
       }
-    });
+    );
   }
 
   if (isLoading) {
@@ -53,7 +66,11 @@ const Info = () => {
               onChange={(e) => setComment(e.target.value)}
             />
           </Form.Group>
-          <Button disabled={addComment.isPending} variant="primary" type="submit" className="mt-2">
+          <Button
+            disabled={addComment.isPending} // used when call still the there is no response form the server after call from client
+            variant="primary" type="submit"
+            className="mt-2"
+          >
             Submit Comment
           </Button>
         </Form>
